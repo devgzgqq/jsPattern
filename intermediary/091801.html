@@ -1,12 +1,141 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>中介者模式</title>
-	<link rel="stylesheet" href="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>中介者模式</title>
+    <link rel="stylesheet" href="">
 </head>
+
 <body>
-	
+    <script type="text/javascript">
+    function Player(name, timeColor) {
+        this.name = name;
+        this.timeColor = timeColor;
+        this.state = 'alive';
+    }
+
+    Player.prototype.win = function() {
+        console.log(this.name + 'win!');
+    };
+
+    Player.prototype.lose = function() {
+        console.log(this.name + 'lose!');
+    };
+
+    // 玩家死亡
+    Player.prototype.die = function() {
+        this.state = 'dead';
+        playerDirector.reciveMessage('playerDead', this);
+    };
+
+    // 移除玩家
+    Player.prototype.remove = function() {
+        playerDirector.reciveMessage('playerRemove', this);
+    };
+
+    // 更换队伍
+    Player.prototype.changTeam = function(color) {
+        playerDirector.reciveMessage('changTeam', this, color);
+    };
+
+    // 玩家工厂
+    var playerFactory = function(name, timeColor) {
+        var newPlayer = new Player(name, timeColor);
+        playerDirector.reciveMessage('addPlayer', newPlayer);
+        return newPlayer;
+    };
+
+    // 中介者
+    var playerDirector = (function() {
+        var players = {},
+            opertions = {};
+
+        // 新增一个玩家
+        opertions.addPlayer = function(player) {
+            var timeColor = player.timeColor;
+            players[timeColor] = players[timeColor] || [];
+
+            players[timeColor].push(player);
+        };
+
+        // 移出一个玩家
+        opertions.removePlayer = function(player) {
+            var timeColor = player.timeColor,
+                timePlayers = players[teamColor] || [];
+
+            for (var i = timePlayers.length - 1; i >= 0; i--) {
+                if (timePlayers[i] === player) {
+                    timePlayers.splice(i, 1);
+                }
+            }
+        };
+
+        // 玩家换队
+        opertions.timeChang = function(player, newTimeColor) {
+            opertions.removePlayer(player);
+            player.timeColor = newTimeColor;
+            opertions.addPlayer(player);
+        };
+
+        // 玩家死亡
+        opertions.playerDead = function(player) {
+            var timeColor = player.timeColor,
+                timePlayers = players[timeColor];
+
+            var all_dead = true;
+
+            for (var i = 0, p; p = timePlayers[i++];) {
+                if (p.state === 'alive') {
+                    all_dead = false;
+                    break;
+                }
+            }
+
+            if (all_dead) {
+                for (var i = 0, p; p = timePlayers[i++];) {
+                    p.lose();
+                }
+
+                for (var color in players) {
+                    if (color !== timeColor) {
+                        timePlayers = players[color];
+                        for (var i = 0, p; p = timePlayers[i++];) {
+                            p.win();
+                        }
+                    }
+                }
+            }
+        };
+
+        var reciveMessage = function() {
+            var message = Array.prototype.shift.call(arguments);
+            opertions[message].apply(this, arguments);
+        };
+
+        return {
+            reciveMessage: reciveMessage
+        }
+    })();
+
+    // 红队
+   	var player1 = playerFactory('red01', 'red'),
+   		player2 = playerFactory('red02', 'red'),
+		player3 = playerFactory('red03', 'red'),
+		player4 = playerFactory('red04', 'red');
+
+	// 蓝队
+   	var player1 = playerFactory('blue01', 'blue'),
+   		player2 = playerFactory('blue02', 'blue'),
+		player3 = playerFactory('blue03', 'blue'),
+		player4 = playerFactory('blue04', 'blue');
+
+	player1.die(); 
+	player2.die(); 
+	player3.die(); 
+	player4.die();
+    </script>
 </body>
+
 </html>
