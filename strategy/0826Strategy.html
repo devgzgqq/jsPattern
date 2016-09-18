@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>策略模式</title>
+</head>
+<body>
+
+<form id="loginForm" method="post">
+    <div>
+        姓名：<input type="text" name="name"/>
+    </div>
+    <div>
+        邮件：<input type="text" name="email"/>
+    </div>
+    <div>
+        <input type="submit" value="提交"/>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    var Strategys = {
+        isNonEmpty: function(value, errorMsg) {
+            if(value === '') {
+                return errorMsg;
+            }
+        },
+        minLength: function(value, long, errorMsg) {
+            if(value.length < long) {
+                return errorMsg;
+            }
+        },
+        isEmail: function(value, errorMsg) {
+            if(!/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(value)){
+                return errorMsg;
+            }
+        }
+    }
+
+    var Validator = function() {
+        this.cache = [];
+    }
+
+    Validator.prototype.add = function(dom, rules) {
+
+        var self = this;
+
+        for(var i = 0, rule; rule = rules[i++];) {
+
+            (function(rule) {
+                self.cache.push(function() {
+                    var arr = rule.strategy.split(':');
+                    var strategy = arr.shift();
+                    arr.unshift(dom.value);
+                    arr.push(rule.errorMsg);
+                    return Strategys[strategy].apply(dom, arr);
+                })
+            })(rule)
+        }
+    }
+
+    Validator.prototype.start = function() {
+        for(var i = 0, validateFun; validateFun = this.cache[i++];) {
+            var msg = validateFun();
+            if(msg) {
+                return msg;
+            }
+        }
+    }
+
+    var loginForm = document.getElementById('loginForm');
+
+    loginForm.onsubmit = function() {
+        var validator = new Validator();
+        validator.add(loginForm.name, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '用户名不能为空！'
+        },{
+            strategy: 'minLength:6',
+            errorMsg: '用户名长度不能小于10位'
+        }]);
+        var msg = validator.start();
+
+        if ( msg ){
+            alert ( msg );
+            return false; }
+    }
+
+
+
+</script>
+</body>
+</html>

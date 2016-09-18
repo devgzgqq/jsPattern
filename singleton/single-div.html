@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单例模式创建弹出层</title>
+</head>
+<body>
+    <button id="loginBtn"> 创建 </button>
+    <script type="text/javascript">
+        var createDiv = function() {
+            var div = document.createElement('div');
+            div.style.display = 'none';
+            div.innerText = '我被创建了!';
+            document.body.appendChild(div);
+            return div;
+        }
+
+//        var createDiv = (function() {
+//            var div;
+//            return function() {
+//                if(!div) {
+//                    div = document.createElement('div');
+//                    div.style.display = 'none';
+//                    div.innerHTML = '我被創建了';
+//                    document.body.appendChild(div);
+//                }
+//                return div;
+//            }
+//        })();
+
+        var getSingle = function(fn) {
+            var result;
+            return function() {
+                return result || (result = fn.apply(this, arguments));
+            }
+        }
+
+        var createSingeDiv = getSingle(createDiv);
+
+        document.getElementById('loginBtn').onclick = function() {
+            var loginLayer = createSingeDiv();
+            loginLayer.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

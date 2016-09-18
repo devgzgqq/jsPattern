@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>中介模式</title>
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <div id="result"></div>
+    <script type="text/javascript">
+    // 玩家
+    function Player(name) {
+        this.points = 0;
+        this.name = name;
+    }
+
+    Player.prototype.play = function() {
+        this.points += 1;
+        mediator.played();
+    };
+
+    // 记分板
+    var scoreboard = {
+        element: document.getElementById('result'),
+        update: function(scope) {
+            var i, msg;
+            for (i in scope) {
+                if (scope.hasOwnProperty(i)) {
+                    msg += '<p><strong>' + i + '<\/strong>>';
+                    msg += scope[i];
+                    msg += '</p>';
+                }
+            }
+            this.element.innerHTML = msg;
+        }
+    };
+
+    //中介者
+    var mediator = {
+        players: {},
+        setup: function() {
+            var players = this.players;
+            players.home = new Player('Home');
+            players.guest = new Player('Guest');
+        },
+        played: function() {
+            var players = this.players;
+            var scope = {
+                Home: players.home.points,
+                Guest: players.guest.points
+            };
+            scoreboard.update(scope);
+        },
+        keypress: function(e) {
+            e = e || window.event;
+            if (e.which === 49) {
+                mediator.players.home.play();
+            }
+            if (e.which === 48) {
+                mediator.players.guest.play();
+            }
+        }
+    };
+
+    mediator.setup();
+    window.onkeypress = mediator.keypress;
+    //游戏在30秒内结束
+    setTimeout(function() {
+        window.onkeypress = null;
+        alert('Game Over!');
+    }, 30000);
+    </script>
+</body>
+
+</html>

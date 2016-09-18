@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片加载</title>
+</head>
+<body>
+
+<script type="text/javascript">
+    var imgLoader = (function() {
+        var img = document.createElement('img');
+        document.body.appendChild(img);
+        return {
+            setImg: function(path) {
+                img.src = path;
+            }
+        }
+    })();
+
+    var proxyImg = (function() {
+        var img = new Image;
+        img.onload = function() {
+            var self = this;
+            setTimeout(function(){
+                console.log('我加载完了.')
+                imgLoader.setImg(self.src);
+            }, 1000)
+        }
+        return {
+            setSrc: function(src) {
+                imgLoader.setImg('./img/adam.jpg');
+                img.src = src;
+            }
+        }
+    })()
+
+    proxyImg.setSrc('./img/ben.png');
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单例模式</title>
+</head>
+<body>
+
+<button id="loginLayer">登录</button>
+
+<script type="text/javascript">
+
+//    var CreateDiv = function() {
+//        var div = document.createElement('div');
+//        div.innerText = '我是登录框!';
+//        div.style.display = 'none';
+//        document.body.appendChild(div);
+//        return div;
+//    }
+
+//    var CreateDiv = (function() {
+//        var div;
+//        return function() {
+//            if(!div) {
+//                div = document.createElement('div');
+//                div.innerText = '我是单例登录框';
+//                div.style.display = 'none';
+//                document.body.appendChild(div);
+//            }
+//            return div;
+//        }
+//    })()
+
+    var CreateDiv = function() {
+        var div = document.createElement('div');
+        div.innerText = '我是登录框';
+        div.style.display = 'none';
+        document.body.appendChild(div);
+        return div;
+    };
+
+    var getSingle = function(fn) {
+        var result;
+        return function() {
+            return result || (result = fn.apply(this, arguments));
+        }
+    };
+
+    var CreateSingleDiv = getSingle(CreateDiv);
+
+    document.getElementById('loginLayer').onclick = function() {
+        var loginLayer = CreateSingleDiv();
+        loginLayer.style.display = 'block';
+    }
+
+</script>
+</body>
+</html>

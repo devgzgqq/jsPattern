@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>练习</title>
+</head>
+<body>
+
+<button id="showDiv">显示</button>
+
+<script type="text/javascript">
+
+    /**
+     * 创建弹出层
+     * @returns {Element|*}
+     */
+    function createDiv() {
+        var div;
+        div = document.createElement('div');
+        div.style.display = 'none';
+        div.innerText = '我是弹出层';
+        document.body.appendChild(div);
+        return div;
+    }
+
+    /**
+     * 获得单例对象
+     * @param fn
+     * @returns {Function}
+     */
+    function getSingleton(fn) {
+        var obj;
+        return function() {
+            return obj || (obj = fn.apply(this, arguments));
+        }
+    }
+
+    var createShowDiv = getSingleton(createDiv);
+
+    document.getElementById('showDiv').onclick = function() {
+        var div = createShowDiv();
+        div.style.display = 'block';
+    }
+
+</script>
+</body>
+</html>

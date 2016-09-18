@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>单一职责</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+<script type="text/javascript">
+	var each = function(data, callback) {
+		for(var i = 0, l = data.length; i < l; i++) {
+			callback.call(data[i], i, data[i]);
+		}
+	};
+
+	var createDiv = function(arr) {
+		each(arr, function(i, item) {
+			var div = document.createElement('div');
+			div.innerHTML = item + 'ddd' + i;
+			document.body.appendChild(div);
+		});
+	};
+
+	createDiv([1,2,3,4,5,6]);
+</script>
+</body>
+</html>

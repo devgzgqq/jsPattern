@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订阅模式</title>
+</head>
+<body>
+<button id="sendBtn">发布</button>
+<script type="text/javascript">
+
+//    var saleOfficer = {};
+//    saleOfficer.clientList = [];
+//
+//    saleOfficer.listen = function(fn) {
+//        this.clientList.push(fn);
+//    }
+//
+//    saleOfficer.trigger = function() {
+//        for(var i = 0, fn; fn = this.clientList[i++];) {
+//            fn.apply(this, arguments);
+//        }
+//    }
+//
+//    saleOfficer.listen(function(price, meter) {
+//        console.log('price: ' + price + ' meter :' + meter);
+//    })
+//
+//    saleOfficer.listen(function(price1, meter) {
+//        console.log('price1: ' + price1 + ' meter :' + meter);
+//    })
+//
+//    saleOfficer.trigger(100, 9);
+//    saleOfficer.trigger(3000, 8);
+
+
+    var saleOfficer = {};
+
+    saleOfficer.clientList = [];
+
+    saleOfficer.listen = function(key, fn) {
+        if(!this.clientList[key]) {
+            this.clientList[key] = [];
+        }
+
+        this.clientList[key].push(fn);
+    }
+
+    saleOfficer.trigger = function() {
+
+        var key = Array.prototype.shift.call(arguments),
+                fns = this.clientList[key];
+
+        if(!fns || fns.length === 0 ) {
+            return false;
+        }
+
+        for(var i = 0, fn; fn = fns[i++];) {
+            fn.apply(this, arguments);
+        }
+
+    }
+
+    saleOfficer.listen('88', function(price) {
+        console.log( 'price :' + price);
+        if(price === 10000) {
+            console.log('太好了，好便宜呀！')
+        }
+    });
+
+    saleOfficer.listen('99', function(price) {
+        console.log('price :' + price);
+    })
+
+    document.getElementById('sendBtn').onclick = function() {
+        saleOfficer.trigger('88', 10000);
+    }
+
+
+//    saleOfficer.trigger('99', 289090);
+
+</script>
+</body>
+</html>

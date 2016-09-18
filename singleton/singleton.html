@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>单例模式</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+<button id="btn">点我</button>
+<script type="text/javascript">
+	// var singleton = (function(name) {
+	// 	var instance = null;
+	// 	var singleton = function(name) {
+	// 		this.name = name;
+	// 	};
+	// 	return function() {
+	// 		if(!instance) {
+	// 			instance = new singleton();
+	// 		}
+	// 		return instance;
+	// 	};
+	// })();
+
+	// var a = singleton('gzgqq');
+	// var b = singleton('wfyqq');
+
+	// console.log(a === b);
+	var CreateDiv = function() {
+		var div = document.createElement('div');
+		div.innerHTML = 'HAHAHA';
+		div.style.display = 'none';
+		document.body.appendChild(div);
+		return div;
+	};
+
+	var getSingle = function(fn) {
+		var result;
+		return function() {
+			return result || (result = fn.apply(this, arguments));
+		};
+	};
+    var createSingleDiv = getSingle(CreateDiv);
+	document.getElementById('btn').onclick = function() {
+		var div = createSingleDiv();
+		div.style.display = 'block';
+	};
+
+</script>
+</body>
+</html>

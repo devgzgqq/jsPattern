@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+<script type="text/javascript">
+	var Ryu = {
+		jump: function() {
+			console.log('挑起');
+		},
+		defense: function() {
+			console.log('放下');
+		},
+		attack: function() {
+			console.log('攻击');
+		},
+		crouch: function() {
+			console.log('蹲下');
+		}
+	};
+
+	var mackCommand = function(receiver, start) {
+		return function() {
+			receiver[start]();
+		};
+	};
+
+	var commands = {
+		"119": "jump",
+		"115": "crouch",
+		"97": "defense",
+		"100": "attack"
+	};
+
+	var commandStack = [];
+
+	document.onkeypress = function(e) {
+		var keyCode = e.keyCode;
+		var command = mackCommand(Ryu, commands[keyCode]);
+		// console.log(commands.hasOwnProperty(keyCode));
+		if(command && commands.hasOwnProperty(keyCode)) {
+			commandStack.push(command);
+			command();
+		}
+	};
+
+	// console.log(commandStack);
+</script>
+</body>
+</html>

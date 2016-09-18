@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单例模式</title>
+</head>
+<body>
+<button id="loginBtn">登录</button>
+<script type="text/javascript">
+    /**
+     * 透明单例
+     */
+//    var CreateDiv = (function() {
+//        var instance = null;
+//
+//        var CreateDiv = function(html) {
+//            if(instance) {
+//                return instance;
+//            }
+//
+//            this.html = html;
+//            this.init();
+//            return instance = this;
+//        };
+//
+//        CreateDiv.prototype.init = function() {
+//            var div = document.createElement('div');
+//            div.innerHTML = this.html;
+//            document.body.appendChild(div);
+//        }
+//
+//        return CreateDiv;
+//    })()
+
+//    var CreateDiv = function(html) {
+//        this.html = html;
+//        this.init();
+//    }
+//
+//    CreateDiv.prototype.init = function() {
+//        var div = document.createElement('div');
+//        div.innerHTML = this.html;
+//        document.body.appendChild(div);
+//    };
+//
+//    var ProxySingletonCreateDiv = (function() {
+//        var instance = null;
+//        return function(html) {
+//            if(!instance) {
+//                instance = new CreateDiv(html);
+//            }
+//            return instance;
+//        }
+//    })()
+//
+//    var a = new ProxySingletonCreateDiv( 'sven1' );
+//    var b = new ProxySingletonCreateDiv( 'sven2' );
+    var createLogin = function(html) {
+        var div = document.createElement('div');
+        div.innerHTML = html;
+        div.style.display = 'none';
+        document.body.appendChild(div);
+        return div;
+    }
+
+    var getSingle = function(fn) {
+        var result;
+        return function() {
+            return result || (result = fn.apply(this, arguments));
+        }
+    };
+
+    var createSingleDiv = getSingle(createLogin);
+
+    document.getElementById('loginBtn').onclick = function() {
+        var newDiv = createSingleDiv('我是单独');
+        newDiv.style.display = 'block';
+    }
+
+</script>
+</body>
+</html>

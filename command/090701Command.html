@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>宏命令</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+	
+<script type="text/javascript">
+	var closeDoorCommand = {
+		execute: function() {
+			console.log('关门');
+		}
+	};
+
+	var openPcCommand = {
+		execute: function() {
+			console.log('开电脑');
+		}
+	};
+
+	var openQqCommand = {
+		execute: function() {
+			console.log('登录QQ');
+		}
+	};
+
+	var MacroCommand = {
+		commandsList: [],
+		add: function(command) {
+			this.commandsList.push(command);
+		},
+		execute: function() {
+			for(var i = 0, command; command = this.commandsList[i++];) {
+				command.execute();
+			}
+		}
+	};
+
+	// var macroCommand = MacroCommand();
+	MacroCommand.add(closeDoorCommand);
+	MacroCommand.add(openPcCommand);
+	MacroCommand.add(openQqCommand);
+	MacroCommand.execute();
+</script>
+</html>

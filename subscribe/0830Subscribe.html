@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>观察者模式</title>
+</head>
+<body>
+
+<button id="click">点我</button>
+
+<script type="text/javascript">
+
+    var Event = (function() {
+        var clientList = {},
+                listen,
+                trigger,
+                remove;
+        listen = function(key, fn) {
+            if(!clientList[key]) {
+                clientList[key] = [];
+            }
+
+            clientList[key].push(fn);
+        }
+
+        trigger = function() {
+            var key = Array.prototype.shift.call(arguments),
+                    fns = clientList[key];
+
+            if(!fns || fns.length === 0) {
+                return false;
+            }
+
+            for(var i = 0, fn; fn = fns[i++];) {
+                fn.apply(null, arguments);
+            }
+        }
+
+        remove = function(key, fn) {
+            var fns = clientList[key];
+
+            if(!fns) {
+                return false;
+            }
+
+            if(!fn) {
+                fns && (fns.length = 0);
+            } else {
+                for (var i= 0, fn; fn = fns[i++];) {
+                    var _fn = fns[i];
+                    if(_fn === fn) {
+                        fns.splice(i, 1);
+                    }
+                }
+            }
+        }
+
+        return {
+            listen: listen,
+            trigger: trigger,
+            remove: remove
+        }
+
+    })()
+
+    document.getElementById('click').onclick = function() {
+        Event.trigger('click', '我被点了！')
+    }
+
+    var a = (function() {
+        Event.listen('click', function(date) {
+            a.helllo('ddd');
+        })
+        return {
+            helllo: function(date) {
+                console.log('传递的信息为：' + date);
+            }
+        }
+    })()
+
+
+</script>
+</body>
+</html>

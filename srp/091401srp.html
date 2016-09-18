@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>单一职责</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+<button tag="login" id="btn">点我吧</button>
+<script type="text/javascript">
+	Function.prototype.after = function(afterfn) {
+		var _self = this;
+		return function() {
+			var ret = _self.apply(this, arguments);
+			afterfn.apply(this, arguments);
+			return ret;
+		};
+	};
+
+	var showLog = function() {
+		console.log('打开浮窗！');
+	};
+
+	var log = function() {
+		console.log('tag:' + this.getAttribute('tag'));
+	};
+
+	document.getElementById('btn').onclick = showLog.after(log);
+</script>
+</body>
+</html>

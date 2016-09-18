@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订阅-发布者模式</title>
+</head>
+<body>
+<script type="text/javascript">
+
+//    var saleOffice = {};
+//
+//    saleOffice.clientList = [];
+//
+//    saleOffice.listen = function(key, fn) {
+//        if(!this.clientList[key]) {
+//            this.clientList[key] = [];
+//        }
+//
+//        this.clientList[key].push(fn);
+//    }
+//
+//    saleOffice.trigger = function() {
+//        var key = Array.prototype.shift.call(arguments),
+//                fns = this.clientList[key];
+//
+//        if(!fns || fns.length === 0) {
+//            return
+//        }
+//
+//        for(var i = 0, fn; fn = fns[i++];) {
+//            fn.apply(this, arguments);
+//        }
+//    }
+//
+//    saleOffice.listen('gzgqq', function(e) {
+//        console.log(e);
+//    })
+//
+//    saleOffice.trigger('gzgqq', '我发布gzgqq了！');
+
+
+    var Event = {
+        clientList: [],
+        listen: function(key, fn) {
+            if(!this.clientList[key]) {
+                this.clientList[key] = [];
+            }
+
+            this.clientList[key].push(fn);
+        },
+        trigger: function() {
+            var key = Array.prototype.shift.call(arguments),
+                    fns = this.clientList[key];
+
+            if(!fns || fns.length === 0) {
+                return false;
+            }
+
+            for(var i = 0, fn; fn = fns[i++];) {
+                fn.apply(this, arguments);
+            }
+        },
+        remove: function(key, fn) {
+            var fns = this.clientList[key];
+
+            if(!fns) {
+                return false;
+            }
+
+            if(!fn) {
+                fns && (fns.length = 0);
+            }
+
+            for(var i=0, fn; fn = fns[i++];) {
+                var _fn = fns[i];
+                if(_fn === fn) {
+                    fns.splice(i, 1);
+                }
+            }
+        }
+    }
+
+    var installEvent = function(obj) {
+        for(var e in Event) {
+            obj[e] = Event[e];
+        }
+    }
+
+    var saleOffice = {};
+
+    installEvent(saleOffice);
+
+    saleOffice.listen('gzgqq', function(str) {
+
+        console.log(str);
+    })
+    saleOffice.listen('gzgqq', function(str) {
+        console.log('01' + str);
+    })
+
+    saleOffice.listen('wfyqq', function(str) {
+        console.log('01' + str);
+    })
+
+    saleOffice.remove('gzgqq');
+
+    saleOffice.trigger('gzgqq', '我来了，哈哈哈。')
+    saleOffice.trigger('wfyqq', '我来了，哈哈哈1111。')
+
+</script>
+</body>
+</html>

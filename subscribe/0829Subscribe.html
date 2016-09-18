@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发布-订阅模式</title>
+</head>
+<body>
+<script type="text/javascript">
+
+//    var saleOffice = {};
+//
+//    saleOffice.clientList = [];
+//
+//    saleOffice.listen = function(fn) {
+//        this.clientList.push(fn);
+//    }
+//
+//    saleOffice.trigger = function() {
+//        for(var i = 0, fn; fn = this.clientList[i++];) {
+//            fn.apply(this, arguments);
+//        }
+//    }
+//
+//    saleOffice.listen(function(a, b) {
+//        console.log( a + " " + b);
+//    })
+//
+//    saleOffice.trigger(88, 1000000);
+
+//    var saleOffice = {};
+//
+//    saleOffice.clientList = [];
+//
+//    saleOffice.listen = function(key, fn) {
+//        if(!this.clientList[key]) {
+//            this.clientList[key] = [];
+//        }
+//
+//        this.clientList[key].push(fn);
+//    }
+//
+//    saleOffice.trigger = function() {
+//        var key = Array.prototype.shift.call(arguments),
+//                fns = this.clientList[key];
+//
+//        if(!fns || fns.length === 0) {
+//            return false;
+//        }
+//
+//        for(var i = 0, fn; fn = fns[i++];) {
+//            fn.apply(this, arguments);
+//        }
+//    }
+//
+//    saleOffice.listen('88', function(price) {
+//        console.log(price + "- 88");
+//    })
+//
+//    saleOffice.trigger('88', 10000);
+//    saleOffice.trigger('99', 200000);
+
+    var Event = {
+        cache: [],
+        listen: function(key, fn) {
+            if(!this.cache[key]) {
+                this.cache[key] = [];
+            }
+
+            this.cache[key].push(fn);
+        },
+        trigger: function() {
+            var key = Array.prototype.shift.call(arguments),
+                    fns = this.cache[key];
+
+            if(!fns || fns.length === 0) {
+                return false;
+            }
+
+            for(var i= 0, fn; fn = fns[i++];) {
+                fn.apply(this, arguments);
+            }
+        }
+    }
+
+    var installEvent = function(e) {
+        for(var i in Event) {
+            e[i] = Event[i];
+        }
+    }
+
+    var saleOffice = {}
+
+    installEvent(saleOffice);
+
+    saleOffice.listen('88', function(p) {
+        console.log(p);
+    })
+
+    saleOffice.trigger('88', 232321)
+
+</script>
+</body>
+</html>

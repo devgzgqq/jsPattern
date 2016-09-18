@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单例模式</title>
+</head>
+<body>
+<button id="loginDiv">登录</button>
+<script type="text/javascript">
+    var CreateLoginDiv = function() {
+        var div = document.createElement('div');
+        div.innerHTML = 'ddddddd';
+        div.style.display = "none";
+        document.body.appendChild(div);
+        return div;
+    }
+
+    var getSingle = function(fn) {
+        var result;
+        return function() {
+            return result || (result = fn.apply(this, arguments))
+        }
+    }
+
+    var createSingleDiv = getSingle(CreateLoginDiv);
+
+    document.getElementById('loginDiv').onclick = function() {
+        var loginDiv = createSingleDiv();
+        loginDiv.style.display = 'block';
+    }
+</script>
+</body>
+</html>

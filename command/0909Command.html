@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>命令模式</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+	<button id="btn">点我</button>
+<script type="text/javascript">
+	// var commands = {
+	// 	open: function() {
+	// 		console.log('打开');
+	// 	},
+	// 	close: function() {
+	// 		console.log('关闭');
+	// 	},
+	// 	login: function() {
+	// 		console.log('登录');
+	// 	}
+	// };
+
+	// var setCommand = function(button, fn) {
+	// 	button.onclick = function() {
+	// 		fn();
+	// 	};
+	// };
+
+	// var openCommand = function() {
+	// 	return function() {
+	// 		commands.open();
+	// 	};
+	// };
+
+	// var openCommandExecute = openCommand();
+
+	// var btn = document.getElementById('btn');
+
+	// setCommand(btn, openCommandExecute);
+	var openCommand = {
+		execute: function() {
+			console.log('打开');
+		}
+	};
+
+	var closeCommand = {
+		execute: function() {
+			console.log('关闭');
+		}
+	};
+
+	var loginCommand = {
+		execute: function() {
+			console.log('登录');
+		}
+	};
+
+	var MacroCommand = {
+		commandsList: [],
+		add: function(command) {
+			this.commandsList.push(command);
+		},
+		execute: function() {
+			for(var i = 0, command; command = this.commandsList[i++];) {
+				command.execute();
+			}
+		}
+	};
+
+	MacroCommand.add(openCommand);
+	MacroCommand.add(closeCommand);
+	MacroCommand.add(loginCommand);
+
+	MacroCommand.execute();
+</script>
+</body>
+</html>

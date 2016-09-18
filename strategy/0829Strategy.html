@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>策略模式</title>
+</head>
+<body>
+<script type="text/javascript">
+
+    var strategys = {
+        isNonEmpty: function(value, errorMsg) {
+            if(value === '') {
+                return errorMsg;
+            }
+        },
+        minLong: function(value, long, errorMsg) {
+            if(value.length < long) {
+                return errorMsg;
+            }
+        },
+        maxLong: function(value, long, errorMsg) {
+            if(value.length < long) {
+                return errorMsg;
+            }
+        }
+    }
+
+    var Validator = function() {
+        this.cache = [];
+    }
+
+    Validator.prototype.add = function(dom, rule, error) {
+        this.cache.push(function() {
+            var arr = rule.split(':');
+            var strategy = arr.shift();
+            arr.unshift(dom);
+            arr.push(error);
+            return strategys[strategy].apply(dom, arr);
+        })
+    }
+
+    Validator.prototype.start = function() {
+        for(var i = 0, fn; fn = this.cache[i++];) {
+            var msg = fn();
+            if(msg) {
+                return msg;
+            }
+        }
+    }
+
+    var date = {
+        name: 'gzgqq'
+    }
+
+    var validator = new Validator();
+    validator.add(date.name, 'minLong:6', '姓名不能小余6位!')
+    console.log(validator.start());
+
+</script>
+</body>
+</html>

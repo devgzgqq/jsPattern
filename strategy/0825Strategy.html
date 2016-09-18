@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>策略模式</title>
+</head>
+<body>
+<form id="loginForm" method="post">
+    <div>
+        姓名:<input name="userName" type="text">
+    </div>
+    <div>
+        <input type="button" onclick="submitClick()" value="提交">
+    </div>
+</form>
+<script type="text/javascript">
+
+    var validators = {
+        isNonEmpty: function(value, errorMsg) {
+            if(value === '') {
+                return errorMsg;
+            }
+        },
+        minlength: function(value, long, errorMsg) {
+            if(value.length < long) {
+                return errorMsg;
+            }
+        }
+    }
+
+    var Validate = function() {
+        this.cache = [];
+    }
+
+    Validate.prototype.add  = function(dom, rule, errorMsg) {
+        var self = this;
+        this.cache.push(function() {
+            var arr = rule.split(':');
+            var strategy = arr.shift();
+            arr.unshift(dom.value);
+            arr.push(errorMsg);
+            console.log(arr);
+            return validators[strategy].apply(dom, arr);
+        })
+    }
+
+    Validate.prototype.start = function() {
+        for(var i = 0, validateFun; validateFun = this.cache[i++];) {
+            var msg = validateFun();
+            if(msg) {
+                return msg;
+            }
+        }
+    }
+
+    var submitClick = function() {
+        var loginForm = document.getElementById('loginForm');
+        var validate = new Validate();
+        console.log(validate);
+        validate.add(loginForm.userName, 'isNonEmpty', '用户名不能为空!');
+        var msg = validate.start();
+        if(msg){
+            var div = document.createElement('div');
+            div.innerText = msg;
+            loginForm.appendChild(div);
+            return false;
+        }
+    }
+
+//    console.log(submitClick());
+
+</script>
+</body>
+</html>

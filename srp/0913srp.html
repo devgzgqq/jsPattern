@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>单一职责</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+<script type="text/javascript">
+	var myImage = (function() {
+		var img = document.createElement('img');
+		document.body.appendChild(img);
+		return {
+			setImg: function(src) {
+				img.src = src;
+			}
+		};
+	})();
+
+	var myImageProxy = (function() {
+		var img = new Image();
+		img.onload = function() {
+			var that = this;
+			setTimeout(function() {
+				myImage.setImg(that.src);
+			}, 1000);
+		};
+		return {
+			setImg: function(src) {
+				myImage.setImg('../img/agw.jpg');
+				img.src = src;
+			}
+		};
+	})();
+	
+	myImageProxy.setImg('../img/adam.jpg');
+</script>
+</body>
+</html>
