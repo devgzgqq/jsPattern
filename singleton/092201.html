@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>惰性单例</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+<script type="text/javascript">
+	function Person(name) {
+		this.name = name;
+	}
+
+	Person.getSingle = (function() {
+		var instance;
+		return function(name) {
+			if(!instance) {
+				instance = new Person(name);
+			}
+			return instance;
+		};
+	})();
+
+	var a = Person.getSingle('gzgqq');
+	var b = Person.getSingle('wfyqq');
+
+	console.log(a === b);
+</script>	
+</body>
+</html>
