@@ -6,11 +6,11 @@ javascript pattern demo
 ## 2, 透明单例
 ## 3, 惰性单例
 ## 4, 通用单例
-'''javascript
+```javascript
 var getSingle = function(fn) {
 	var result;
 	return function() {
 		return result || (result = fn.apply(this, arguments));
 	}
 }
-'''
+```
