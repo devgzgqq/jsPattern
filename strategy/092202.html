@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>策略模式</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+<script type="text/javascript">
+	var strategies = {
+		'S': function(salary) {
+			console.log(salary * 4);
+		},
+		'A': function(salary) {
+			console.log(salary * 3);
+		},
+		'B': function(salary) {
+			console.log(salary * 2);
+		}
+	};
+
+	var calculateBonus = function(level, salary) {
+		strategies[level](salary);
+	};
+
+	calculateBonus('S', 50000);
+	calculateBonus('A', 50000);
+</script>	
+</body>
+</html>
