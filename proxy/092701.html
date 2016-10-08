@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>图片预加载</title>
+	<link rel="stylesheet" href="">
+</head>
+<body>
+<script type="text/javascript">
+	var myImage = (function() {
+		var img = document.createElement('img');
+		document.body.appendChild(img);
+		return {
+			setSrc: function(src) {
+				img.src = src;
+			}
+		};
+	})();
+
+	var proxyImage = (function() {
+		var img = new Image();
+		img.onload = function() {
+			myImage.setSrc(img.src);
+		};
+		return {
+			setSrc: function(src) {
+				myImage.setSrc('./img/ben.png');
+				img.src = src;
+			}
+		};
+	})();
+	proxyImage.setSrc('./img/adam.jpg');
+</script>	
+</body>
+</html>
